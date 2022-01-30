@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+﻿using iWantApp.Infra.Data;
 
 namespace iWantApp.Endpoints.Employees;
 
@@ -9,18 +8,14 @@ public class EmployeeGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(int page, int rows, UserManager<IdentityUser> userManager)
+    public static IResult Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
-        var users = userManager.Users.Skip((page - 1) * rows).Take(rows).ToList();
-        var employees = new List<EmployeeResponse>();
-        foreach(var user in users)
-        {
-            var claims = userManager.GetClaimsAsync(user).Result;
-            var claimName = claims.FirstOrDefault(c => c.Type == "Name");
-            var userName = claimName != null ? claimName.Value : string.Empty;
-            employees.Add(new EmployeeResponse(user.Email, userName));
-        }
+        if (page == null || page.Value < 0)
+            return Results.BadRequest("Page is required");
 
-        return Results.Ok(employees);
+        if (rows == null || rows.Value < 0)
+            rows = 10;
+
+        return Results.Ok(query.Execute(page.Value, rows.Value));
     }
 }
