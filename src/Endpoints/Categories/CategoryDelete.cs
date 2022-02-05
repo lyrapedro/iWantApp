@@ -10,7 +10,7 @@ public class CategoryDelete
     public static string[] Methods => new string[] { HttpMethod.Delete.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
         var category = context.Categories.Where(c => c.Id == id).FirstOrDefault();
 
@@ -18,7 +18,7 @@ public class CategoryDelete
 
         context.Remove(category);
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.Ok();
     }
