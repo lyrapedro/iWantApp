@@ -1,9 +1,4 @@
-﻿using iWantApp.Domain.Products;
-using iWantApp.Infra.Data;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-
-namespace iWantApp.Endpoints.Categories;
+﻿namespace iWantApp.Endpoints.Categories;
 
 public class CategoryPost
 {

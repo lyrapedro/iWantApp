@@ -1,7 +1,4 @@
-﻿using iWantApp.Infra.Data;
-using Microsoft.AspNetCore.Authorization;
-
-namespace iWantApp.Endpoints.Employees;
+﻿namespace iWantApp.Endpoints.Employees;
 
 public class EmployeeGetAll
 {
