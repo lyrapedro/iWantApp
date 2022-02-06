@@ -1,4 +1,16 @@
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseSerilog((context, configuration) =>
+{
+    configuration
+        .WriteTo.Console()
+        .WriteTo.MSSqlServer(
+            context.Configuration["ConnectionString:iWantDb"],
+                sinkOptions: new MSSqlServerSinkOptions()
+                {
+                    AutoCreateSqlTable = true,
+                    TableName = "Logs"
+                });
+});
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:iWantDb"]);
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
